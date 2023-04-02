@@ -22,6 +22,7 @@ public class MovieApplication {
     public MovieApplication(List<Room> roomList, List<Movie> movieList) {
         this.roomList = List.copyOf(roomList);
         this.movieList = List.copyOf(movieList);
+        screeningList = new ArrayList<>();
     }
 
 
@@ -48,11 +49,21 @@ public class MovieApplication {
     public Screening addScreening(Screening screening) {
 
         int breakTimeInMinutes = 15;
+        boolean movieTitleFound = false;
+        for (Movie actualMovie:movieList) {
 
+            if(screening.getMovieTitle().equals(actualMovie.getTitle())){
+                movieTitleFound = true;
+                break;
+            }
+        }
+        if(!movieTitleFound){
+            throw new IllegalArgumentException("not find movie in the movieList");
+        }
 
         for (Screening actualScreening : screeningList) {
-            if (actualScreening.getRoomName().equals(screening.getRoomName())) {
 
+            if (actualScreening.getRoomName().equals(screening.getRoomName())) {
 
                 if (actualScreening.getStartTime().isBefore(screening.getStartTime()) && getEndtimeOfScreening(actualScreening, breakTimeInMinutes).isAfter(screening.getStartTime())) {
                     throw new IllegalArgumentException("idő ütközés");
@@ -68,6 +79,7 @@ public class MovieApplication {
 
         }
         screeningList.add(screening);
+
 
         return screening;
 
