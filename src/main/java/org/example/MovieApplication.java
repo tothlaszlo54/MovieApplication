@@ -46,21 +46,37 @@ public class MovieApplication {
 
     }
 
-    public Screening addScreening(Screening screening) {
+    private void checkIfMovieExist(Screening screening) {
+        boolean movieFound = false;
 
-        int breakTimeInMinutes = 15;
-        boolean movieTitleFound = false;
-        for (Movie actualMovie:movieList) {
+        for (Movie actualMovie : movieList) {
 
-            if(screening.getMovieTitle().equals(actualMovie.getTitle())){
-                movieTitleFound = true;
+            if (screening.getMovieTitle().equals(actualMovie.getTitle())) {
+                movieFound = true;
                 break;
             }
         }
-        if(!movieTitleFound){
+        if (!movieFound) {
             throw new IllegalArgumentException("not find movie in the movieList");
         }
+    }
 
+    private void checkIfRoomExist(Screening screening) {
+        boolean roomFound = false;
+
+        for (Room actualRoom : roomList) {
+            if (screening.getRoomName().equals(actualRoom.getRoomName())) {
+                roomFound = true;
+                break;
+            }
+        }
+        if (!roomFound) {
+            throw new IllegalArgumentException("Nincs ilyen nevű terem");
+        }
+    }
+
+
+    private void checkIfScreeningOverlapping(Screening screening, int breakTimeInMinutes) {
         for (Screening actualScreening : screeningList) {
 
             if (actualScreening.getRoomName().equals(screening.getRoomName())) {
@@ -78,6 +94,16 @@ public class MovieApplication {
             }
 
         }
+    }
+
+    public Screening addScreening(Screening screening) {
+
+
+        checkIfMovieExist(screening);
+        checkIfRoomExist(screening);
+
+        checkIfScreeningOverlapping(screening, 15);
+
         screeningList.add(screening);
 
 
