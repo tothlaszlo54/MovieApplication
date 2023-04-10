@@ -35,4 +35,9 @@ public class Screening {
     public LocalDateTime getStartTime(){
         return startTime;
     }
+
+    @Override
+    public String toString() {
+        return "A megadott vetítés adatai: (" + movieTitle + ", "+ roomName +", "+ startTime.getYear() + "." + startTime.getMonth() + "." + startTime.getDayOfMonth() + "-" + startTime.getHour() + ":" + startTime.getMinute() + ")";
+    }
 }
